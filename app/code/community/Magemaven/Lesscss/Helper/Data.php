@@ -10,7 +10,9 @@
  * @copyright   Copyright (c) 2012 Sergey Storchay <r8@r8.com.ua>
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-require_once(Mage::getBaseDir('lib') . DS . 'lessphp' . DS .'lessc.inc.php');
+spl_autoload_unregister(array(Varien_Autoload::instance(), 'autoload'));
+require_once(Mage::getBaseDir('lib') . DS . 'less.php' . DS . 'lessc.inc.php');
+spl_autoload_register(array(Varien_Autoload::instance(), 'autoload'));
 
 class Magemaven_Lesscss_Helper_Data extends Mage_Core_Helper_Abstract
 {
@@ -40,8 +42,6 @@ class Magemaven_Lesscss_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         try {
-            $targetFilename = Mage::getBaseDir('media')
-                . DS . 'lesscss' . DS . md5($file) . '.css';
             $cacheKey = 'less_' . $file;
 
             /** @var $cacheModel Mage_Core_Model_Cache */
@@ -51,16 +51,29 @@ class Magemaven_Lesscss_Helper_Data extends Mage_Core_Helper_Abstract
                 $cache = @unserialize($cache);
             }
 
-            if (!file_exists($targetFilename)) {
-                $cache = false;
-            }
-
             $lastUpdated = (isset($cache['updated'])) ? $cache['updated'] : 0;
             $less = new lessc;
             if ($this->enableCompress()) {
                 $less->setFormatter("compressed");
             }
-            $cache = lessc::cexecute(($cache) ? $cache : $file, false, $less);
+            if ($cache) {
+                $cache = $less->cachedCompile($cache);
+            } else {
+                $cache = array(
+                    'compiled' => $less->compileFile($file),
+                    'files' => $less->allParsedFiles(),
+                    'root' => $file,
+                    'updated' => time()
+                );
+            }
+
+            $baseName = basename($file, '.less');
+            $targetFilename = Mage::getBaseDir('media')
+                . DS . 'lesscss' . DS . $baseName . '_' . md5($cache['compiled']) . '.css';
+
+            if (!file_exists($targetFilename)) {
+                $lastUpdated = 0;
+            }
 
             if ($cache['updated'] > $lastUpdated) {
                 if (!file_exists(dirname($targetFilename))) {
@@ -78,7 +91,6 @@ class Magemaven_Lesscss_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $targetFilename;
     }
-
     public function enableCompress()
     {
         return (bool) Mage::getStoreConfig(self::XML_PATH_ENABLE_COMPRESS);
