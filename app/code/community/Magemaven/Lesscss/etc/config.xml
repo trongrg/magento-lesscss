@@ -19,6 +19,13 @@
         </Magemaven_Lesscss>
     </modules>
     <global>
+        <blocks>
+            <page>
+                <rewrite>
+                    <html_head>Magemaven_Lesscss_Block_Page_Html_Head</html_head>
+                </rewrite>
+            </page>
+        </blocks>
         <models>
             <lesscss>
                 <class>Magemaven_Lesscss_Model</class>
@@ -59,4 +66,13 @@
             </resources>
         </acl>
     </adminhtml>
+    <frontend>
+        <layout>
+            <updates>
+                <lesscss>
+                    <file>lesscss.xml</file>
+                </lesscss>
+            </updates>
+        </layout>
+    </frontend>
 </config>

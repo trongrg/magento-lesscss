@@ -28,7 +28,7 @@ class Magemaven_Lesscss_Model_Design_Package extends Mage_Core_Model_Design_Pack
         /** @var $helper Magemaven_Lesscss_Helper_Data */
         $helper = Mage::helper('lesscss');
 
-        if ($helper->getFileExtension($file) == 'less') {
+        if ($helper->getFileExtension($file) == 'less' && !$helper->isDevelopment()) {
             $file = $this->getFilename($file, $params);
 
             if ($file) {

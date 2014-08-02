@@ -1,3 +1,5 @@
-app/etc/modules/Magemaven_Lesscss.xml app/etc/modules/Magemaven_Lesscss.xml
-app/code/community/Magemaven/Lesscss  app/code/community/Magemaven/Lesscss
-lib/less.php                          lib/less.php
+app/etc/modules/Magemaven_Lesscss.xml                 app/etc/modules/Magemaven_Lesscss.xml
+app/code/community/Magemaven/Lesscss                  app/code/community/Magemaven/Lesscss
+lib/less.php                                          lib/less.php
+js/lesscss                                            js/lesscss
+app/design/frontend/base/default/layout/lesscss.xml   app/design/frontend/base/default/layout/lesscss.xml

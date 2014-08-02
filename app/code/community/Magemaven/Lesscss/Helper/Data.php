@@ -17,6 +17,7 @@ spl_autoload_register(array(Varien_Autoload::instance(), 'autoload'));
 class Magemaven_Lesscss_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const XML_PATH_ENABLE_COMPRESS = 'lesscss/general/compress';
+    const XML_PATH_DEVELOPMENT = 'lesscss/general/development';
 
     /**
      * Get file extension in lower case
@@ -91,8 +92,14 @@ class Magemaven_Lesscss_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $targetFilename;
     }
+
     public function enableCompress()
     {
         return (bool) Mage::getStoreConfig(self::XML_PATH_ENABLE_COMPRESS);
+    }
+
+    public function isDevelopment()
+    {
+        return (bool) Mage::getStoreConfig(self::XML_PATH_DEVELOPMENT);
     }
 }
